@@ -61,7 +61,7 @@ clean:
 	rm -rf $(TOPDIR)/build_dir 2>/dev/null || true
 	rm -rf $(TOPDIR)/tmp 2>/dev/null || true
 	rm -rf $(TOPDIR)/host 2>/dev/null || true
-	rm $(TOPDIR)/.config 2>/dev/null || true
+	rm $(TOPDIR)/.config* 2>/dev/null || true
 
 distclean: clean
 	$(SUBMAKE) -C $(TOPDIR)/scripts/config clean
