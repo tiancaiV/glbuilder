@@ -10,6 +10,8 @@
 /build_dir
 /tmp
 /logs
+/files
+/customer
 *.orig
 *.rej
 *~
