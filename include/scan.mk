@@ -99,14 +99,14 @@ $(TMP_DIR)/info/.files-$(SCAN_TARGET).mk: $(FILELIST)
 
 $(TARGET_STAMP)::
 	+( \
-		$(NO_TRACE_MAKE) $(FILELIST); \
+		$(NO_TRACE_MAKE) -f include/Makefile-scan $(FILELIST); \
 		MD5SUM=$$(cat $(FILELIST) $(OVERRIDELIST) | mkhash md5 | awk '{print $$1}'); \
 		[ -f "$@.$$MD5SUM" ] || { \
 			rm -f $@.*; \
 			touch $@.$$MD5SUM; \
 			touch $@; \
 		} \
-	)
+	) 
 
 $(TMP_DIR)/.$(SCAN_TARGET): $(TARGET_STAMP)
 	$(call progress,Collecting $(SCAN_NAME) info: merging...)

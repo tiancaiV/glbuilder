@@ -4,6 +4,42 @@ VERSIONS_IN="tmp/.versions.in"
 PACKAGES_IN="tmp/.packages.in"
 CONFIGDEPS="tmp/.configdeps"
 
+echo_feeds()
+{
+    local board="$1"
+    local version="$2"
+    local type="$3"
+    local name="$4"
+    local value="$5"
+    [ -z "$name" ] && return
+    echo  "TARGETSDKFEEDS-\$(CONFIG_SDKFEEDS_${board}_${version}_${name}) += $type $name $value\\n" >>$CONFIGDEPS
+    echo -e "config SDKFEEDS_${board}_${version}_${name}\n\
+        bool \"Enable ${name}..................${value}\"\n\
+        default y \n\
+        help\n\
+          Enable ${name} for feeds of ${board} firmware version ${version}\n"
+}
+
+scanfeeds()
+{
+    local basedir=$(dirname $1)
+    local board=$(basename $basedir)
+    local version=$(basename $1)
+    local profiles=$(ls $1/feeds.*)
+    [ -z "$profiles" ] && return
+    echo -e "if VERSION_${board}_${version}\n" >>$PACKAGES_IN
+    echo "menu \"Select feeds for SDK of ${board} ${version}\"" >>$PACKAGES_IN
+    {\
+      for p in $profiles;do \
+        while read -r feed;do \
+            echo_feeds $board $version $feed; \
+        done < "$p"; \
+      done \
+    } >> $PACKAGES_IN
+    echo "endmenu" >>$PACKAGES_IN
+    echo -e "endif\n" >>$PACKAGES_IN
+}
+
 echo_package()
 {
     local board="$1"
@@ -46,6 +82,7 @@ scanversion()
     echo "    prompt \"Select version for ${board}\"" >>$VERSIONS_IN
     for v in $versions; do
         scanpackage "$1/$v"
+        scanfeeds "$1/$v"
         echo -e "TARGETVERSION-\$(CONFIG_VERSION_${board}_${v}) += $v" >>$CONFIGDEPS
         echo -e "config VERSION_${board}_${v}\n\
             bool \"${board} version ${v}\"\n\

@@ -8,14 +8,14 @@ AWS_URL:=https://fw.gl-inet.com/releases
 ALIYUN_URL:=https://fw.gl-inet.cn/releases
 
 world:
-
 $(TOPDIR)/host/bin/mkhash: $(TOPDIR)/scripts/mkhash.c
 	mkdir -p $(dir $@)
 	$(CC) -O2 -o $@ $<
 
 tools-prepare: $(TOPDIR)/host/bin/mkhash
 
-tmp-prepare:
+tmp-prepare: FORCE
+	mkdir -p $(TOPDIR)/tmp
 	$(TOPDIR)/scripts/scanboarddir.sh $(TOPDIR)/board
 
 tmp/.customer-package.in: tmp-prepare FORCE
@@ -26,20 +26,24 @@ tmp/.customer-package.in: tmp-prepare FORCE
 	$(TOPDIR)/scripts/package-metadata.pl config $(TOPDIR)/tmp/customer.tmp/.packageinfo > $@
 	$(TOPDIR)/scripts/package-metadata.pl mk $(TOPDIR)/tmp/customer.tmp/.packageinfo 2>/dev/null >> $(TOPDIR)/tmp/.configdeps
 
-cripts/config/%onf: CFLAGS+= -O2
+scripts/config/%onf: CFLAGS+= -O2
 scripts/config/%onf:
 	$(SUBMAKE) -C $(TOPDIR)/scripts/config $(notdir $@)
 
 menuconfig: scripts/config/mconf tmp-prepare tmp/.customer-package.in
 	$< ./Config.in
 
-.config:tmp-prepare FORCE
+.config:scripts/config/mconf tmp-prepare tmp/.customer-package.in tools-prepare FORCE
 	@+if [ \! -e .config ] ; then \
-		$(SUBMAKE) menuconfig; \
+		 $(TOPDIR)/scripts/config/mconf ./Config.in; \
 	fi
+
+$(TOPDIR)/.config: .config
+$(TOPDIR)/tmp/.configdeps: tmp/.customer-package.in
 
 -include $(TOPDIR)/.config
 -include $(TOPDIR)/tmp/.configdeps
+
 
 ifeq ($(CONFIG_DOWNLOAD_FROM_AWS),y)
 DOWNLOAD_URL:=$(AWS_URL)
@@ -65,12 +69,9 @@ clean:
 
 distclean: clean
 	$(SUBMAKE) -C $(TOPDIR)/scripts/config clean
-	rm -rf $(TOPDIR)/dl 2>/dev/null || true
 	rm -rf $(TOPDIR)/files/* 2>/dev/null || true
 	rm -rf $(TOPDIR)/bin 2>/dev/null || true
-	rm -rf $(TOPDIR)/customer/ipk/* 2>/dev/null || true
-	rm -rf $(TOPDIR)/customer/source/* 2>/dev/null || true
 	
 
 FORCE: ;
-.PHONY: FORCE world menuconfig clean distclean
+.PHONY: FORCE world menuconfig clean distclean tmp/.customer-package.in

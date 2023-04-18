@@ -417,7 +417,8 @@ sub gen_package_mk() {
 				my @vdeps = grep { $srcname ne $_->{src}{name} } @{$vpkg_dep};
 
 				foreach my $vdep (@vdeps) {
-					my $depstr = sprintf '$(curdir)/%s/compile', $vdep->{src}{path};
+					#my $depstr = sprintf '$(curdir)/%s/compile', $vdep->{src}{path};
+					my $depstr =$vdep->{src}{name};
 					if (@vdeps > 1) {
 						$depstr = sprintf '$(if $(CONFIG_PACKAGE_%s),%s)', $vdep->{name}, $depstr;
 					}
@@ -436,6 +437,7 @@ sub gen_package_mk() {
 			next if $pkg->{buildonly};
 
 			printf "CUSTOMERPACKAGE-%s += %s\n", $config, $src->{name};
+			printf "CUSTOMERPATH-%s := %s\n", $src->{name}, $src->{path};
 
 			if ($pkg->{variant}) {
 				if (!defined($variant_default) or $pkg->{variant_default}) {
@@ -490,7 +492,8 @@ sub gen_package_mk() {
 					next;
 				}
 
-				my $depstr = sprintf '$(curdir)/%s/compile', $src_dep->{path}.$depsuffix;
+				#my $depstr = sprintf '$(curdir)/%s/compile', $src_dep->{path}.$depsuffix;
+				my $depstr =  $src_dep->{name};
 				my $depline = get_conditional_dep($condition, $depstr);
 				if ($depline) {
 					$deplines{$suffix}{$depline}++;
@@ -498,12 +501,13 @@ sub gen_package_mk() {
 			}
 		}
 
-		#foreach my $suffix (sort keys %deplines) {
-		#	my $depline = join(" ", sort keys %{$deplines{$suffix}});
-		#	if ($depline) {
-		#		$line .= sprintf "\$(curdir)/%s/compile += %s\n", $src->{path}.$suffix, $depline;
-		#	}
-		#}
+		foreach my $suffix (sort keys %deplines) {
+			my $depline = join(" ", sort keys %{$deplines{$suffix}});
+			if ($depline) {
+				#$line .= sprintf "\$(curdir)/%s/compile += %s\n", $src->{path}.$suffix, $depline;
+				$line .= sprintf "CUSTOMERDEP-%s := %s\n", $src->{name}, $depline;
+			}
+		}
 	}
 
 	if ($line ne "") {

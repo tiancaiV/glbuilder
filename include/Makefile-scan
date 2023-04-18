@@ -1,0 +1,8 @@
+TOPDIR:=${CURDIR}
+
+export TOPDIR
+export PATH:=$(TOPDIR)/host/bin:$(PATH)
+
+all:
+
+.PHONY: all

@@ -1,6 +1,7 @@
 define download_imagebuilder
 imagebuilder_target:=$(TOPDIR)/dl/imagebuilder-$(TARGETMODEL-y)-$(TARGETVERSION-y).tar.xz
   $$(imagebuilder_target): $(TOPDIR)/scripts/download.pl  .config 
+	mkdir -p $$(TOPDIR)/dl
 	$$< $(TOPDIR)/dl $$(notdir $$@) $$(imagebuilder_hash) $(DOWNLOAD_URL)/imagebuilder/$(TARGETMODEL-y)
 endef
 
@@ -18,18 +19,24 @@ imagebuilder_prepare:=$(TOPDIR)/build_dir/imagebuilder-$(TARGETMODEL-y)-$(TARGET
 endef
 
 define compile_imagebuilder
-TARGETPACKAGE-y += $(subst ",,$(CONFIG_CUSTOMER_BUILDIN_PACKAGES))
+TARGETPACKAGE-y += $(subst ",,$(CONFIG_CUSTOMER_BUILDIN_PACKAGES)) $(CUSTOMERPACKAGE-y)
 imagebuilder_compile:=$(TOPDIR)/bin/$(TARGETMODEL-y)-$(TARGETVERSION-y)/target
+ifneq ($$(CUSTOMERPACKAGE-y),)
+  $$(imagebuilder_compile): $$(imagebuilder_prepare) sdk/package/index FORCE
+else
   $$(imagebuilder_compile): $$(imagebuilder_prepare) FORCE
+endif
 	mkdir -p $$(imagebuilder_compile)
 	mkdir -p $$(TOPDIR)/files/etc
 	echo "$(date '+%Y-%m-%d %H:%M:%S')" >$$(TOPDIR)/files/etc/version.date
-	echo $$(subst ",,$$(CONFIG_CUSTOMER_VERSION_NUMBER)) >$$(TOPDIR)/files/etc/glversion
-	echo $$(subst ",,$$(CONFIG_CUSTOMER_VERSION_NUMBER)) >$$(imagebuilder_prepare)/release
-	echo $$(subst ",,$$(CONFIG_CUSTOMER_VERSION_TYPE)) >$$(TOPDIR)/files/etc/version.type
-	echo $$(subst ",,$$(CONFIG_CUSTOMER_VERSION_RELEASENOTES)) >$$(imagebuilder_prepare)/gl_release_note
+	echo "$$(subst ",,$$(CONFIG_CUSTOMER_VERSION_NUMBER))" >$$(TOPDIR)/files/etc/glversion
+	echo "$$(subst ",,$$(CONFIG_CUSTOMER_VERSION_NUMBER))" >$$(imagebuilder_prepare)/release
+	echo "$$(subst ",,$$(CONFIG_CUSTOMER_VERSION_TYPE))" >$$(TOPDIR)/files/etc/version.type
+	echo "$$(subst ",,$$(CONFIG_CUSTOMER_VERSION_RELEASENOTES))" >$$(imagebuilder_prepare)/gl_release_note
 	[ -L $$(imagebuilder_prepare)/files ] && unlink $$(imagebuilder_prepare)/files || true
 	[ -f $$(imagebuilder_prepare)/files ] || ln -s $$(TOPDIR)/files $$(imagebuilder_prepare)/files
+	[ -f $$(imagebuilder_prepare)/files/etc/opkg/distfeeds.conf ] || { mkdir -p $$(imagebuilder_prepare)/files/etc/opkg && \
+		cp $$(TOPDIR)/board/$$(TARGETMODEL-y)/$$(TARGETVERSION-y)/distfeeds.conf  $$(imagebuilder_prepare)/files/etc/opkg/; }
 	$$(SUBMAKE) -C $$(imagebuilder_prepare) image PROFILE=$$(MODEL_PROFILE) PACKAGES="$$(TARGETPACKAGE-y)" BIN_DIR=$$@ FILES=$$(TOPDIR)/files
 endef
 
@@ -45,11 +52,7 @@ customer/package/ipk/index: $(imagebuilder_prepare) FORCE
 imagebuilder/download: $(imagebuilder_target)
 imagebuilder/prepare: $(imagebuilder_prepare)
 
-ifneq ($(CUSTOMERPACKAGE-y),)
-imagebuilder/compile: customer/package/ipk/index sdk/package/index  $(imagebuilder_compile)
-else
 imagebuilder/compile: customer/package/ipk/index   $(imagebuilder_compile)
-endif
 
 imagebuilder/clean:
 	rm -rf $(imagebuilder_prepare)

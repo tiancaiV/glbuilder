@@ -18,6 +18,7 @@ endchoice
 
 config CUSTOMER_BUILDIN_PACKAGES
 	string
+  default "-dnsmasq"
 	prompt "Customer build-in packages"
 	help
 	  "List of packages that the customer needs to package into the firmware, separate multiple packages using Spaces, You can also use '-' to exclude packets"
@@ -41,8 +42,8 @@ menu "Configure customer version information"
 
   config CUSTOMER_VERSION_RELEASENOTES
   	string
-    default "Firmware generated using imagebuilder"
     prompt "Specified version release notes"
+    default "Firmware generated using glbuilder, powered by GL.iNet(luochongjun@gl-inet.com)"
 	  help
 	    "These contents are appended to the firmware metadata data as releasenote, Please mainly do not use single and double quotation marks"
 endmenu
