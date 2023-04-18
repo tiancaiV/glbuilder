@@ -16,14 +16,6 @@ config DOWNLOAD_FROM_ALIYUN
               Download imagebuilder and SDK from China Aliyun
 endchoice
 
-config CUSTOMER_BUILDIN_PACKAGES
-	string
-  default "-dnsmasq"
-	prompt "Customer build-in packages"
-	help
-	  "List of packages that the customer needs to package into the firmware, separate multiple packages using Spaces, You can also use '-' to exclude packets"
-
-
 menu "Configure customer version information"
 
   config CUSTOMER_VERSION_NUMBER
@@ -47,5 +39,13 @@ menu "Configure customer version information"
 	  help
 	    "These contents are appended to the firmware metadata data as releasenote, Please mainly do not use single and double quotation marks"
 endmenu
+
+config CUSTOMER_BUILDIN_PACKAGES
+	string
+  default "-dnsmasq"
+	prompt "Customer build-in packages"
+	help
+	  "List of packages that the customer needs to package into the firmware, separate multiple packages using Spaces, You can also use '-' to exclude packets"
+
 
 source "tmp/.customer-package.in"

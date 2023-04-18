@@ -40,7 +40,6 @@ menuconfig: scripts/config/mconf tmp-prepare tmp/.customer-package.in
 
 $(TOPDIR)/.config: .config
 $(TOPDIR)/tmp/.configdeps: tmp/.customer-package.in
-
 -include $(TOPDIR)/.config
 -include $(TOPDIR)/tmp/.configdeps
 
