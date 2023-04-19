@@ -38,6 +38,8 @@ case "${MODEL}" in
 	"axt1800")
 		echo "gl_collision_package:= -dnsmasq -wpad" >> ${DST}/${INFO}
 	;;
+	"a1300")
+		echo "gl_collision_package:= -dnsmasq -wpad-basic-wolfssl" >> ${DST}/${INFO}
 	*)
 		echo "gl_collision_package:= -dnsmasq" >> ${DST}/${INFO}
 esac

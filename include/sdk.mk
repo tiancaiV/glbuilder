@@ -9,7 +9,7 @@ endef
 define prepare_sdk
 sdk_prepare:=$(TOPDIR)/build_dir/sdk-$(TARGETMODEL-y)-$(TARGETVERSION-y)
   $$(sdk_prepare): $$(sdk_target) tmp-prepare
-	[ -d $$(sdk_prepare) ] && $(TOPDIR)/scripts/timestamp.pl -n $(TOPDIR)/tmp/sdk/prepared $(TOPDIR)/dl/$$< || { \
+	[ -d $$(sdk_prepare) ] && $(TOPDIR)/scripts/timestamp.pl -n $(TOPDIR)/tmp/sdk/$(TARGETMODEL-y)-$(TARGETVERSION-y)/prepared $(TOPDIR)/dl/$$< || { \
 	  mkdir -p $$(sdk_prepare); \
 	  tar -xf $$< -C $$@ --strip-components 1 || rm -rf $$@; \
 	  echo  "$$(TARGETSDKFEEDS-y)" >$$(sdk_prepare)/feeds.conf.default; \
@@ -26,8 +26,8 @@ sdk_prepare:=$(TOPDIR)/build_dir/sdk-$(TARGETMODEL-y)-$(TARGETVERSION-y)
 		[ -L $$(sdk_prepare)/feeds/ipq807x/ipq807x ] && unlink $$(sdk_prepare)/feeds/ipq807x/ipq807x || true; \
 		ln -s $$(TOPDIR)/feeds/ipq807x/ipq807x/ $$(sdk_prepare)/feeds/ipq807x/ipq807x; \
 	  fi; \
-	  mkdir -p $(TOPDIR)/tmp/sdk; \
-	  touch $(TOPDIR)/tmp/sdk/prepared; \
+	  mkdir -p $(TOPDIR)/tmp/sdk/$(TARGETMODEL-y)-$(TARGETVERSION-y); \
+	  touch $(TOPDIR)/tmp/sdk/$(TARGETMODEL-y)-$(TARGETVERSION-y)/prepared; \
 	}
 endef
 
@@ -38,13 +38,13 @@ $(eval $(call prepare_sdk))
 sdk/download: $(sdk_target)
 sdk/prepare: $(sdk_prepare)
 sdk/feeds/update: $(sdk_prepare)
-	$(TOPDIR)/scripts/timestamp.pl -n $(TOPDIR)/tmp/sdk/feeds/stamp-sdk-feeds-update $(sdk_prepare)/feeds $(TOPDIR)/customer/source || \
+	$(TOPDIR)/scripts/timestamp.pl -n $(TOPDIR)/tmp/sdk/$(TARGETMODEL-y)-$(TARGETVERSION-y)/feeds/stamp-sdk-feeds-update $(sdk_prepare)/feeds $(TOPDIR)/customer/source || \
 	$(SUBMAKE) -C $(sdk_prepare) package/symlinks && \
 	echo "CONFIG_AUTOREMOVE=n" >> $(sdk_prepare)/.config && \
 	echo "CONFIG_AUTOREBUILD=n" >> $(sdk_prepare)/.config && \
 	$(SUBMAKE) -C $(sdk_prepare) defconfig && \
-	mkdir -p $(TOPDIR)/tmp/sdk/feeds/ && \
-	touch $(TOPDIR)/tmp/sdk/feeds/stamp-sdk-feeds-update
+	mkdir -p $(TOPDIR)/tmp/sdk/$(TARGETMODEL-y)-$(TARGETVERSION-y)/feeds/ && \
+	touch $(TOPDIR)/tmp/sdk/$(TARGETMODEL-y)-$(TARGETVERSION-y)/feeds/stamp-sdk-feeds-update
 
 sdk/compile: sdk/feeds/update tmp/.customer-package.in
 	$(foreach p,$(CUSTOMERPACKAGE-y), \
@@ -67,6 +67,6 @@ sdk/package/index: sdk/install FORCE
 
 sdk/clean:
 	rm -rf $(sdk_prepare) || true
-	rm -rf $(TOPDIR)/tmp/sdk || true
+	rm -rf $(TOPDIR)/tmp/sdk/$(TARGETMODEL-y)-$(TARGETVERSION-y) || true
 
 .PHONY: sdk/download sdk/clean  sdk/prepare sdk/compile sdk/feeds/update sdk/install sdk/package/index
