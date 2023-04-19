@@ -1,0 +1,47 @@
+#!/bin/sh
+
+[ $# -lt 3 ] && {
+	echo "$0 <src> <model> <version>" 
+	exit 1
+}
+
+SRC="$1"
+MODEL="$2"
+VERSION="$3"
+
+INFO="version_info.mk"
+DISTFEEDS="distfeeds.conf"
+FEEDS="feeds.conf.default"
+MANIFEST="${MODEL}.manifest"
+
+exit_error()
+{
+	echo "${1} not found in ${SRC}, exiting"
+	exit 1
+}
+
+[ -f ${SRC}/${INFO} ] || exit_error ${INFO}
+[ -f ${SRC}/${DISTFEEDS} ] || exit_error ${DISTFEEDS}
+[ -f ${SRC}/${FEEDS} ] || exit_error ${FEEDS}
+[ -f ${SRC}/${MANIFEST} ] || exit_error ${MANIFEST}
+
+DST="./board/${MODEL}/${VERSION}"
+mkdir -p ${DST}
+
+cp ${SRC}/${INFO} ${DST}/
+cp ${SRC}/${DISTFEEDS} ${DST}/
+cp ${SRC}/${FEEDS}  ${DST}/
+cp ${SRC}/${MANIFEST} ${DST}/
+
+case "${MODEL}" in
+	"ax1800"|\
+	"axt1800")
+		echo "gl_collision_package:= -dnsmasq -wpad" >> ${DST}/${INFO}
+	;;
+	*)
+		echo "gl_collision_package:= -dnsmasq" >> ${DST}/${INFO}
+esac
+
+#将openwrt.org替换为github，中国大陆访问更快
+sed -i "s/git.openwrt.org\/feed/github.com\/openwrt/g"  ${DST}/${FEEDS}
+sed -i "s/git.openwrt.org\/project/github.com\/openwrt/g"  ${DST}/${FEEDS}

@@ -42,7 +42,6 @@ endmenu
 
 config CUSTOMER_BUILDIN_PACKAGES
 	string
-  default "-dnsmasq"
 	prompt "Customer build-in packages"
 	help
 	  "List of packages that the customer needs to package into the firmware, separate multiple packages using Spaces, You can also use '-' to exclude packets"

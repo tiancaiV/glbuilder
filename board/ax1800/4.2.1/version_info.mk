@@ -1,0 +1,4 @@
+MODEL_PROFILE:=glinet_ax1800
+imagebuilder_hash:=f9bf92825819467b6122fb05f179c01cb8f763b941300f94feca8dea2d6f3c71
+sdk_hash:=0dd765046cf6a7cd11747540102aaa4c2df2bb402d657e8bc5242df2b9a940d2
+gl_collision_package:= -dnsmasq -wpad

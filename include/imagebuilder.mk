@@ -11,15 +11,20 @@ imagebuilder_prepare:=$(TOPDIR)/build_dir/imagebuilder-$(TARGETMODEL-y)-$(TARGET
 	mkdir -p $$(imagebuilder_prepare)
 	cp $$(TOPDIR)/scripts/make_gl_metadata.py  $$(imagebuilder_prepare)
 	tar -xf $$< -C $$@ --strip-components 1 || rm -rf $$@
-	cat $$(TOPDIR)/board/$$(TARGETMODEL-y)/$$(TARGETVERSION-y)/distfeeds.conf > $$(imagebuilder_prepare)/repositories.conf
-	echo  "" >> $$(imagebuilder_prepare)/repositories.conf
-	echo  "src imagebuilder file:packages" >> $$(imagebuilder_prepare)/repositories.conf
-	echo  "src sdksource file://$$(TOPDIR)/bin/$$(TARGETMODEL-y)-$$(TARGETVERSION-y)/package" >> $$(imagebuilder_prepare)/repositories.conf
+	cat $$(TOPDIR)/board/$$(TARGETMODEL-y)/$$(TARGETVERSION-y)/distfeeds.conf > $$(imagebuilder_prepare)/repositories.conf;\
+	echo  "" >> $$(imagebuilder_prepare)/repositories.conf;\
+	echo  "src imagebuilder file:packages" >> $$(imagebuilder_prepare)/repositories.conf;\
+	echo  "src sdksource file://$$(TOPDIR)/bin/$$(TARGETMODEL-y)-$$(TARGETVERSION-y)/package" >> $$(imagebuilder_prepare)/repositories.conf;\
 	echo  "src glbuilder file://$$(TOPDIR)/customer/ipk" >> $$(imagebuilder_prepare)/repositories.conf
+	if [ $$(TARGETMODEL-y) = ax1800 -o $$(TARGETMODEL-y) = axt1800 ];then \
+		mkdir -p $$(imagebuilder_prepare)/feeds/ipq807x; \
+		[ -L $$(imagebuilder_prepare)/feeds/ipq807x/ipq807x ] && unlink $$(imagebuilder_prepare)/feeds/ipq807x/ipq807x || true; \
+		ln -s $$(TOPDIR)/feeds/ipq807x/ipq807x/ $$(imagebuilder_prepare)/feeds/ipq807x/ipq807x; \
+	fi
 endef
 
 define compile_imagebuilder
-TARGETPACKAGE-y += $(subst ",,$(CONFIG_CUSTOMER_BUILDIN_PACKAGES)) $(CUSTOMERPACKAGE-y)
+TARGETPACKAGE-y += $(gl_collision_package) $(subst ",,$(CONFIG_CUSTOMER_BUILDIN_PACKAGES)) $(CUSTOMERPACKAGE-y)
 imagebuilder_compile:=$(TOPDIR)/bin/$(TARGETMODEL-y)-$(TARGETVERSION-y)/target
 ifneq ($$(CUSTOMERPACKAGE-y),)
   $$(imagebuilder_compile): $$(imagebuilder_prepare) sdk/package/index FORCE
@@ -52,7 +57,7 @@ customer/package/ipk/index: $(imagebuilder_prepare) FORCE
 imagebuilder/download: $(imagebuilder_target)
 imagebuilder/prepare: $(imagebuilder_prepare)
 
-imagebuilder/compile: customer/package/ipk/index   $(imagebuilder_compile)
+imagebuilder/compile: customer/package/ipk/index   $(imagebuilder_prepare)  $(imagebuilder_compile)
 
 imagebuilder/clean:
 	rm -rf $(imagebuilder_prepare)

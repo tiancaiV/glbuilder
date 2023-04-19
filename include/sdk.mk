@@ -9,17 +9,26 @@ endef
 define prepare_sdk
 sdk_prepare:=$(TOPDIR)/build_dir/sdk-$(TARGETMODEL-y)-$(TARGETVERSION-y)
   $$(sdk_prepare): $$(sdk_target) tmp-prepare
-	mkdir -p $$(sdk_prepare)
-	tar -xf $$< -C $$@ --strip-components 1 || rm -rf $$@
-	#cp $$(TOPDIR)/board/$$(TARGETMODEL-y)/$$(TARGETVERSION-y)/feeds.conf.default $$(sdk_prepare)/feeds.conf.default
-	echo  "$$(TARGETSDKFEEDS-y)" >$$(sdk_prepare)/feeds.conf.default
-	cp $$(TOPDIR)/include/subdir.mk $$(sdk_prepare)/include/subdir.mk
-	echo ""  >> $$(sdk_prepare)/feeds.conf.default
-	echo "src-link glbuilder $$(TOPDIR)/customer/source"  >> $$(sdk_prepare)/feeds.conf.default
-	sed -i 's/^[ \t]*//g' $$(sdk_prepare)/feeds.conf.default
-	[ -d $$(sdk_prepare)/dl ] && rm -rf $$(sdk_prepare)/dl || true
-	[ -L $$(sdk_prepare)/dl ] && unlink $$(sdk_prepare)/dl || true
-	[ -f $$(sdk_prepare)/dl ] || ln -s $$(TOPDIR)/dl $$(sdk_prepare)/dl
+	[ -d $$(sdk_prepare) ] && $(TOPDIR)/scripts/timestamp.pl -n $(TOPDIR)/tmp/sdk/prepared $(TOPDIR)/dl/$$< || { \
+	  mkdir -p $$(sdk_prepare); \
+	  tar -xf $$< -C $$@ --strip-components 1 || rm -rf $$@; \
+	  echo  "$$(TARGETSDKFEEDS-y)" >$$(sdk_prepare)/feeds.conf.default; \
+	  cp $$(TOPDIR)/include/subdir.mk $$(sdk_prepare)/include/subdir.mk; \
+	  echo ""  >> $$(sdk_prepare)/feeds.conf.default; \
+	  echo "src-link glbuilder $$(TOPDIR)/customer/source"  >> $$(sdk_prepare)/feeds.conf.default; \
+	  sed -i 's/^[ \t]*//g' $$(sdk_prepare)/feeds.conf.default; \
+	  [ -d $$(sdk_prepare)/dl ] && rm -rf $$(sdk_prepare)/dl || true; \
+	  [ -L $$(sdk_prepare)/dl ] && unlink $$(sdk_prepare)/dl || true; \
+	  [ -f $$(sdk_prepare)/dl ] || ln -s $$(TOPDIR)/dl $$(sdk_prepare)/dl; \
+	  if [ $$(TARGETMODEL-y) = ax1800 -o $$(TARGETMODEL-y) = axt1800 ];then \
+	  	sed -i '246,258d' $$(sdk_prepare)/include/package-ipkg.mk; \
+		mkdir -p $$(sdk_prepare)/feeds/ipq807x; \
+		[ -L $$(sdk_prepare)/feeds/ipq807x/ipq807x ] && unlink $$(sdk_prepare)/feeds/ipq807x/ipq807x || true; \
+		ln -s $$(TOPDIR)/feeds/ipq807x/ipq807x/ $$(sdk_prepare)/feeds/ipq807x/ipq807x; \
+	  fi; \
+	  mkdir -p $(TOPDIR)/tmp/sdk; \
+	  touch $(TOPDIR)/tmp/sdk/prepared; \
+	}
 endef
 
 $(eval $(call download_sdk))

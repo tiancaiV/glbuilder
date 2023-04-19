@@ -1,0 +1,4 @@
+MODEL_PROFILE:=glinet_gl-mt2500
+imagebuilder_hash:=5169350db81eaf215e0b4e0e1465266e66f75b54ac6801a2a6852ef5295ad969
+sdk_hash:=818c01f60e160bcad56240fb32415a7fe595623ec16d0e5ad06ffbbe46839e6c
+gl_collision_package:= -dnsmasq

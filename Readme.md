@@ -33,7 +33,7 @@ make
 
 1. 如果是openwrt通用的ipk，glbuilder将自动从imagebuilder或gl的软件仓库自动查找安装，如果是非常见的ipk请将自己的ipk文件放置在项目根目录的customer/ipk/目录下
 2. 根据自己的需求完成[基础配置](#编译支持gl-ui的固件基础配置)（不需要执行最后的make）
-3. 在Customer build-in packages选项中加入IPK的名字，如luci-app-aria2; 选项默认值-dnsmasq代表不需要安装dnsmasq，原因是glinet的固件使用dnsmasq-full,dnsmasq是openwrt默认选择的包，这里如果同时安装会提示冲突报错，前面的‘-’代表这个包需要移除，如果自己有需要移除的默认包也是同样的处理方式。
+3. 在Customer build-in packages选项中加入IPK的名字，如luci-app-aria2; 如果要移除某个包可以在前面加上'-'符号，如-dnsmasq代表不需要安装dnsmasq。在项目board/<model>/<version>/version_info.mk中，有通过gl_collision_package预置一些移除的包，原因是这些包与glinet的预置包冲突，如果有必要，可以编辑修改对应的gl_collision_package变量。
 4. 保存配置并退出，执行
 ```
 make
