@@ -8,6 +8,13 @@
 ![play](./image/menuconfig.png)
 
 
+## 安装编译环境
+```
+sudo apt update 
+sudo apt install device-tree-compiler g++ ncurses-dev python asciidoc bash bc binutils bzip2 fastjar flex gawk gcc genisoimage gettext git intltool jikespg libgtk2.0-dev libncurses5-dev libssl-dev make mercurial patch perl-modules python2.7-dev rsync ruby sdcc subversion unzip util-linux wget xsltproc zlib1g-dev zlib1g-dev -y
+```
+
+
 
 ## 编译支持GL UI的固件(基础配置)
 
