@@ -6,6 +6,8 @@ export PATH:=$(TOPDIR)/host/bin:$(PATH)
 
 AWS_URL:=https://fw.gl-inet.com/releases
 ALIYUN_URL:=https://fw.gl-inet.cn/releases
+MAKE_PID := $(shell echo $$PPID)
+JOB_FLAG := $(filter -j%, $(subst -j ,-j,$(shell ps T | grep "^\s*$(MAKE_PID).*$(MAKE)")))
 
 world:
 $(TOPDIR)/host/bin/mkhash: $(TOPDIR)/scripts/mkhash.c
@@ -53,9 +55,6 @@ endif
 -include $(TOPDIR)/board/$(TARGETMODEL-y)/$(TARGETVERSION-y)/version_info.mk
 include $(TOPDIR)/include/sdk.mk
 include $(TOPDIR)/include/imagebuilder.mk
-
-
-
 
 world: .config tools-prepare imagebuilder/compile
 	@echo "done"

@@ -31,9 +31,23 @@ sdk_prepare:=$(TOPDIR)/build_dir/sdk-$(TARGETMODEL-y)-$(TARGETVERSION-y)
 	}
 endef
 
+
+define customer_package
+$(foreach p,$(sdk_customer_target_packages),
+  CUSTOMERPACKAGE-$(p):=$(subst $(TOPDIR)/,,$(CUSTOMERPATH-$(p)))
+  $$(CUSTOMERPACKAGE-$(p))/compile: sdk/feeds/update
+	$$(SUBMAKE)  -C $$(sdk_prepare) $(JOB_FLAG) package/feeds/glbuilder/$(p)/compile IGNORE_ERRORS=m 2>/dev/null;
+	$$(sdk_prepare)/staging_dir/host/bin/find $$(sdk_prepare)/bin -type f -name $(p)*.ipk -exec cp -f {}  $(TOPDIR)/bin/$(TARGETMODEL-y)-$(TARGETVERSION-y)/package/ \;
+  $$(CUSTOMERPACKAGE-$(p))/clean: sdk/prepare
+	$$(SUBMAKE)  -C $$(sdk_prepare) $(JOB_FLAG)  package/feeds/glbuilder/$(p)/clean IGNORE_ERRORS=m 2>/dev/null;
+	-rm -f $(TOPDIR)/bin/$(TARGETMODEL-y)-$(TARGETVERSION-y)/package/$(p)*.ipk
+)
+endef
+
+sdk_customer_target_packages:= $(sort $(foreach p,$(CUSTOMERPACKAGE-y),$(p) $(CUSTOMERDEP-$(p))))
 $(eval $(call download_sdk))
 $(eval $(call prepare_sdk))
-
+$(eval $(call customer_package))
 
 sdk/download: $(sdk_target)
 sdk/prepare: $(sdk_prepare)
@@ -49,10 +63,9 @@ sdk/feeds/update: $(sdk_prepare)
 sdk/compile: sdk/feeds/update tmp/.customer-package.in
 	$(foreach p,$(CUSTOMERPACKAGE-y), \
 		$(TOPDIR)/scripts/timestamp.pl -n $(sdk_prepare)/tmp/.glbuilder/package/feeds/glbuilder/$(p)/compiled $(CUSTOMERPATH-$(p)) || \
-		$(SUBMAKE)  -C $(sdk_prepare) -j17 package/feeds/glbuilder/$(p)/compile IGNORE_ERRORS=m 2>/dev/null; \
+		$(SUBMAKE)  -C $(sdk_prepare) $(JOB_FLAG) package/feeds/glbuilder/$(p)/compile IGNORE_ERRORS=m 2>/dev/null; \
 	)
 
-sdk_customer_target_packages:= $(sort $(foreach p,$(CUSTOMERPACKAGE-y),$(p) $(CUSTOMERDEP-$(p))))
 sdk/install: sdk/compile
 	mkdir -p $(TOPDIR)/bin/$(TARGETMODEL-y)-$(TARGETVERSION-y)/package
 	$(warning  $(sort $(sdk_customer_target_packages)))

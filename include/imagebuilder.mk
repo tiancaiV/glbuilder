@@ -53,7 +53,7 @@ $(eval $(call download_imagebuilder))
 $(eval $(call prepare_imagebuilder))
 $(eval $(call compile_imagebuilder))
 
-customer/package/ipk/index: $(imagebuilder_prepare) FORCE
+customer/ipk/index: $(imagebuilder_prepare) FORCE
 	(cd $(TOPDIR)/customer/ipk; $(imagebuilder_prepare)/scripts/ipkg-make-index.sh . > Packages && \
 		gzip -9nc Packages > Packages.gz; \
 	) >/dev/null 2>/dev/null
@@ -61,10 +61,10 @@ customer/package/ipk/index: $(imagebuilder_prepare) FORCE
 imagebuilder/download: $(imagebuilder_target)
 imagebuilder/prepare: $(imagebuilder_prepare)
 
-imagebuilder/compile: customer/package/ipk/index   $(imagebuilder_prepare)  $(imagebuilder_compile)
+imagebuilder/compile: customer/ipk/index   $(imagebuilder_prepare)  $(imagebuilder_compile)
 
 imagebuilder/clean:
 	rm -rf $(imagebuilder_prepare) || true
 	rm -rf $(TOPDIR)/tmp/imagebuilder/$(TARGETMODEL-y)-$(TARGETVERSION-y) || true
 
-.PHONY: imagebuilder/download  imagebuilder/prepare imagebuilder/compile customer/package/ipk/index imagebuilder/clean
+.PHONY: imagebuilder/download  imagebuilder/prepare imagebuilder/compile customer/ipk/index imagebuilder/clean

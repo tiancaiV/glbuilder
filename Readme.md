@@ -15,7 +15,6 @@ sudo apt install device-tree-compiler g++ ncurses-dev python asciidoc bash bc bi
 ```
 
 
-
 ## 编译支持GL UI的固件(基础配置)
 
 1. 进入menuconfig界面进行配置
@@ -76,7 +75,10 @@ make sdk/install #将编译好的ipk拷贝到bin目录
 make sdk/package/index #给编译好的ipk生成索引
 make sdk/clean #清除所有SDK相关的编译环境
 
-make customer/package/ipk/index #为cuntomer/ipk目录下的IPK文件生成索引
+make customer/source/<path>/compile #编译customer/source/目录下的单个包
+make customer/source/<path>/clean #清除customer/source/目录下指定包的编译环境及IPK文件
+make customer/ipk/index #为cuntomer/ipk目录下的IPK文件生成索引
+
 make imagebuilder/download #下载imagebuilder镜像
 make imagebuilder/prepare #将imagebuilder镜像解压并配置一些基础文件
 make imagebuilder/compile #打包固件
