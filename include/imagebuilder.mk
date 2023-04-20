@@ -12,7 +12,7 @@ imagebuilder_prepare:=$(TOPDIR)/build_dir/imagebuilder-$(TARGETMODEL-y)-$(TARGET
 	  mkdir -p $$(imagebuilder_prepare); \
 	  cp $$(TOPDIR)/scripts/make_gl_metadata.py  $$(imagebuilder_prepare); \
 	  tar -xf $$< -C $$@ --strip-components 1 || rm -rf $$@; \
-	  cat $$(TOPDIR)/board/$$(TARGETMODEL-y)/$$(TARGETVERSION-y)/distfeeds.conf > $$(imagebuilder_prepare)/repositories.conf; \
+	  cat $$(TOPDIR)/board/$$(TARGETMODEL-y)/$$(TARGETVERSION-y)/distfeeds.conf|grep -v kmod > $$(imagebuilder_prepare)/repositories.conf; \
 	  echo  "" >> $$(imagebuilder_prepare)/repositories.conf; \
 	  echo  "src imagebuilder file:packages" >> $$(imagebuilder_prepare)/repositories.conf; \
 	  echo  "src sdksource file://$$(TOPDIR)/bin/$$(TARGETMODEL-y)-$$(TARGETVERSION-y)/package" >> $$(imagebuilder_prepare)/repositories.conf; \

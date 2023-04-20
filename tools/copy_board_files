@@ -40,6 +40,10 @@ case "${MODEL}" in
 	;;
 	"a1300")
 		echo "gl_collision_package:= -dnsmasq -wpad-basic-wolfssl" >> ${DST}/${INFO}
+	;;
+	"s200")
+		echo "gl_collision_package:= -dnsmasq -wpad-basic-wolfssl -kmod-usb-serial-ch341" >> ${DST}/${INFO}
+	;;
 	*)
 		echo "gl_collision_package:= -dnsmasq" >> ${DST}/${INFO}
 esac
