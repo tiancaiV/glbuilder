@@ -1,91 +1,109 @@
 # glbuilder
 
-## 简介
-在这个项目之前，我在glinet的中文论坛有帖子教大家怎样基于[gl-infra-builder](https://github.com/gl-inet/gl-infra-builder)打包出带glinet页面的固件，不少用户喜欢，由于驱动部分使用到很多芯片厂商维护的驱动代码，我们无权开放给用户，尝试过以ko形式提供给用户，但总会遇到很多奇奇怪怪的问题，为此，我基于gl-infra-builder的产出物imagebuilder和SDK构建了glbuilder这个项目来解决当前的问题。
+## Documentation
+[English](./)
 
-**glbuilder同样支持完整构建带glinet UI界面的固件，同时，还支持直接集成ipk文件和源码文件**，另外，为了便于更多的小白用户可以玩转编译，我还为项目配置了menuconfig图形界面和国内源。
+[中文](./Readme-cn.md)
+
+## Introduction
+Before this project, I had a post on the glinet Chinese forum to teach you how to package the firmware with the glinet page based on [gl-infra-builder](https://github.com/gl-inet/gl-infra-builder) , many users like it. Since the driver part uses the driver code maintained by many chip manufacturers, we have no right to open it to users. We have tried to provide it to users in the form of ko, but we will always encounter many strange problems. For this reason, I built the glbuilder project based on the gl-infra-builder output imagebuilder and SDK to solve the current problem.
+
+**glbuilder also supports complete construction of firmware with glinet UI interface. At the same time, it also supports direct integration of ipk files and source code files**. In addition, in order to make it easier for more novice users to enjoy compiling, I also configured menuconfig for the project Graphical interface and domestic source.
 
 ![play](./image/menuconfig.png)
 
+## Firmware functions show
+![play](./image/play.gif)
 
-## 安装编译环境
+## Install environment
 ```
-sudo apt update 
-sudo apt install device-tree-compiler g++ ncurses-dev python asciidoc bash bc binutils bzip2 fastjar flex gawk gcc genisoimage gettext git intltool jikespg libgtk2.0-dev libncurses5-dev libssl-dev make mercurial patch perl-modules python2.7-dev rsync ruby sdcc subversion unzip util-linux wget xsltproc zlib1g-dev zlib1g-dev -y
+sudo apt update
+sudo apt install device-tree-compiler g++ ncurses-dev python asciidoc bash bc binutils bzip2 fastjar flex gawk gcc genisoimage gettext git intltool jikespg libgtk2.0-dev libncurses5-dev libssl-dev make mercurial patch perl2.rs-modules python ruby sdcc subversion unzip util-linux wget xsltproc zlib1g-dev zlib1g-dev -y
 ```
 
+## Clone repository
+```
+git clone https://github.com/gl-inet/glbuilder && cd glbuilder
+```
 
-## 编译支持GL UI的固件(基础配置)
+## Compile firmware that supports GL UI (basic configuration)
 
-1. 进入menuconfig界面进行配置
+1. Enter the menuconfig interface to configure
 ```
 make menuconfig
 ```
-2. 在Select GL.iNet router model选项中选择路由器型号。
-3. 在Select version for mt3000选项中选择基于官方固件的版本做后续修改。
-4. Select mt3000 version 4.2.2 build-in packages选项中可以选择glinet的内置包，新手建议保持默认，不做修改。
-5. Select feeds for SDK of mt3000 4.2.2选项可以使能SDK的feeds，禁用无需使用feeds可以加快源码编译的速度，新手建议保持默认，不做修改。
-6. Select the download source location选项可以选择imagebuilder和SDK镜像的下载源，大陆用户建议选择China Aliyun
-7. 在Configure customer version information下面可以配置自己的版本号，版本类型，releasenotes等版本相关内容，可以自己根据实际情况修改
-8. 以上配置完成后，暂不关注其他的配置选项，保存退出后执行
+2. Select the router model in the Select GL.iNet router model option.
+3. In the Select version for mt3000 option, select the version based on the official firmware for subsequent modification.
+4. In the Select mt3000 version 4.2.2 build-in packages option, you can choose the built-in package of glinet. Novices suggest to keep the default and not modify it.
+5. Select feeds for SDK of mt3000 The 4.2.2 option can enable the feeds of the SDK, and disabling feeds without using them can speed up the speed of source code compilation. For beginners, it is recommended to keep the default without modification.
+6. Select the download source location option to select the download source of imagebuilder and SDK image, mainland users are recommended to choose China Aliyun
+7. Under Configure customer version information, you can configure your own version number, version type, releasenotes and other version-related content, and you can modify it according to the actual situation
+8. After the above configuration is completed, do not pay attention to other configuration options for the time being, save and exit and execute
 ```
 make
 ```
-9. 等待编译完成后，编译好的镜像会在当前目录的bin/<model>/<version>/target目录下
+9. After the compilation is completed, the compiled image will be in the bin/<model>/<version>/target directory of the current directory
 
 
 
-## 加入自己的IPK
 
-1. 如果是openwrt通用的ipk，glbuilder将自动从imagebuilder或gl的软件仓库自动查找安装，如果是非常见的ipk请将自己的ipk文件放置在项目根目录的customer/ipk/目录下
-2. 根据自己的需求完成[基础配置](#编译支持gl-ui的固件基础配置)（不需要执行最后的make）
-3. 在Customer build-in packages选项中加入IPK的名字，如luci-app-aria2; 如果要移除某个包可以在前面加上'-'符号，如-dnsmasq代表不需要安装dnsmasq。在项目board/<model>/<version>/version_info.mk中，有通过gl_collision_package预置一些移除的包，原因是这些包与glinet的预置包冲突，如果有必要，可以编辑修改对应的gl_collision_package变量。
-4. 保存配置并退出，执行
+## Add your own IPK
+
+1. If it is an openwrt common ipk, glbuilder will automatically find and install it from the imagebuilder or gl software warehouse. If it is an uncommon ipk, please place your own ipk file in the customer/ipk/ directory of the project root directory
+2. Complete the [basic configuration](#compile-firmware-that-supports-gl-ui-basic-configuration) according to your own needs(do not need to execute the final make)
+3. Add the IPK name in the Customer build-in packages option, such as luci-app-aria2; if you want to remove a certain package, you can add a '-' symbol in front, such as -dnsmasq means that dnsmasq does not need to be installed. In the project board/<model>/<version>/version_info.mk, there are some removed packages preset by gl_collision_package. The reason is that these packages conflict with the preset packages of glinet. If necessary, you can edit and modify the corresponding gl_collision_package variable.
+4. Save the configuration and exit, execute
 ```
 make
 ```
-5. 编译好的镜像位置与基础配置中的镜像位置一样
+5. The location of the compiled image is the same as the location of the image in the basic configuration
 
 
+## Add your own source code
 
-## 加入自己的源码文件
-
-1. 将自己的源码文件克隆到项目根目录的customer/source目录下
-2. 根据自己的需求完成[基础配置](#编译支持gl-ui的固件基础配置)（不需要执行最后的make）
-3. 在Select customer package目录下选择自己需要编译到固件的包，此目录下的目录展开基于源码中的各个Makefile，与openwrt官方源码的展开方式一致。
-4. 保存配置并退出，执行
+1. Clone your own source code files into the customer/source directory of the project root directory
+2. Complete the [basic configuration](#compile-firmware-that-supports-gl-ui-basic-configuration) according to your own needs(do not need to execute the final make)
+3. Select the package that you need to compile into the firmware in the Select customer package directory. The directory expansion in this directory is based on each Makefile in the source code, which is consistent with the expansion method of the official openwrt source code.
+4. Save the configuration and exit, execute
 ```
 make
 ```
-5. 编译好的ipk文件在当前目录的bin/<model>/<version>/package目录下
-5. 编译好的镜像位置与基础配置中的镜像位置一样
+5. The compiled ipk file is in the bin/<model>/<version>/package directory of the current directory
+6. The location of the compiled image is the same as that in the basic configuration
 
+## Add your own files
+Create a files directory in the project root directory and put your own files, for example
+```
+mkdir -p files/etc/config
+echo "test my files" >files/etc/config/test_config
+```
+The firmware compiled in this way can see the test_config file in the /etc/config/ directory in the file system
 
 
 ## TIPS
-1. 源码和IPK形式的编译可以相互组合
-2. Customer build-in packages 选项中使用'-'符号移除的包可能被其他依赖重新选择，需要把对应的依赖包同时移除
-3. 出现问题时可以分步调试，目前常用的子命令有：
+1. Compilation in the form of source code and IPK can be combined with each other
+2. The packages removed using the '-' symbol in the Customer build-in packages option may be reselected by other dependencies, and the corresponding dependent packages need to be removed at the same time
+3. When a problem occurs, it can be debugged step by step. Currently, the commonly used subcommands are:
 ```
-make sdk/download  #下载SDK镜像
-make sdk/prepare #将SDK镜像解压并配置一些基础文件
-make sdk/feeds/update #更新SDK的feeds
-make sdk/compile #使用SDK编译源码形式的包
-make sdk/install #将编译好的ipk拷贝到bin目录
-make sdk/package/index #给编译好的ipk生成索引
-make sdk/clean #清除所有SDK相关的编译环境
+make sdk/download #Download SDK image
+make sdk/prepare #Decompress the SDK image and configure some basic files
+make sdk/feeds/update #Update SDK feeds
+make sdk/compile #Use the SDK to compile the source code package
+make sdk/install #Copy the compiled ipk to the bin directory
+make sdk/package/index #Generate index for compiled ipk
+make sdk/clean #Clear all SDK related compilation environment
 
-make customer/source/<path>/compile #编译customer/source/目录下的单个包
-make customer/source/<path>/clean #清除customer/source/目录下指定包的编译环境及IPK文件
-make customer/ipk/index #为cuntomer/ipk目录下的IPK文件生成索引
+make customer/source/<path>/compile #Compile a single package in the customer/source/ directory
+make customer/source/<path>/clean #Clear the compilation environment and IPK file of the specified package in the customer/source/ directory
+make customer/ipk/index #Generate index for IPK files in the cuntomer/ipk directory
 
-make imagebuilder/download #下载imagebuilder镜像
-make imagebuilder/prepare #将imagebuilder镜像解压并配置一些基础文件
-make imagebuilder/compile #打包固件
-make imagebuilder/clean: #清除所有imagebuilder相关的编译环境
+make imagebuilder/download #Download imagebuilder image
+make imagebuilder/prepare #Decompress the imagebuilder image and configure some basic files
+make imagebuilder/compile #package firmware
+make imagebuilder/clean: #Clear all imagebuilder related compilation environment
 
-make menuconfig #进入配置菜单
-make clean #删除构建目录及临时文件
-make distclean #删除构建目录及临时文件，删除生成好的镜像文件和所有构建工具
+make menuconfig #Enter the configuration menu
+make clean #Delete the build directory and temporary files
+make distclean #Delete the build directory and temporary files, delete the generated image files and all build tools
 
 ```
