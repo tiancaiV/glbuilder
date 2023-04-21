@@ -12,7 +12,8 @@ imagebuilder_prepare:=$(TOPDIR)/build_dir/imagebuilder-$(TARGETMODEL-y)-$(TARGET
 	  mkdir -p $$(imagebuilder_prepare); \
 	  cp $$(TOPDIR)/scripts/make_gl_metadata.py  $$(imagebuilder_prepare); \
 	  tar -xf $$< -C $$@ --strip-components 1 || rm -rf $$@; \
-	  cat $$(TOPDIR)/board/$$(TARGETMODEL-y)/$$(TARGETVERSION-y)/distfeeds.conf|grep -v kmod > $$(imagebuilder_prepare)/repositories.conf; \
+	  [ "$(CONFIG_NOT_USE_REMOTE_REPO)" = "y" ] || \
+	  	cat $$(TOPDIR)/board/$$(TARGETMODEL-y)/$$(TARGETVERSION-y)/distfeeds.conf|grep -v kmod > $$(imagebuilder_prepare)/repositories.conf; \
 	  echo  "" >> $$(imagebuilder_prepare)/repositories.conf; \
 	  echo  "src imagebuilder file:packages" >> $$(imagebuilder_prepare)/repositories.conf; \
 	  echo  "src sdksource file://$$(TOPDIR)/bin/$$(TARGETMODEL-y)-$$(TARGETVERSION-y)/package" >> $$(imagebuilder_prepare)/repositories.conf; \
@@ -38,6 +39,10 @@ endif
 	mkdir -p $$(imagebuilder_compile)
 	-rm -rf $$(imagebuilder_prepare)/files 2>/dev/null 
 	mkdir -p $$(imagebuilder_prepare)/files/etc
+	-[ -n $(CONFIG_SIGNATURE_KEY_PATH) ] && \
+		[ -d $(CONFIG_SIGNATURE_KEY_PATH) ] && [ -f $(CONFIG_SIGNATURE_KEY_PATH)/key-build ] && [ -f $(CONFIG_SIGNATURE_KEY_PATH)/key-build.pub ] && \
+	  		cp $(CONFIG_SIGNATURE_KEY_PATH)/key-build*  $$(imagebuilder_prepare)/ && \
+			cp $(CONFIG_SIGNATURE_KEY_PATH)/key-build.pub $$(imagebuilder_prepare)/files/etc;
 	echo "$(date '+%Y-%m-%d %H:%M:%S')" >$$(imagebuilder_prepare)/files/etc/version.date
 	echo "$$(subst ",,$$(CONFIG_CUSTOMER_VERSION_NUMBER))" >$$(imagebuilder_prepare)/files/etc/glversion
 	echo "$$(subst ",,$$(CONFIG_CUSTOMER_VERSION_NUMBER))" >$$(imagebuilder_prepare)/release

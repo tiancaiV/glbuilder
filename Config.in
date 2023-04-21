@@ -1,5 +1,6 @@
  mainmenu "GL.iNet(luochongjun@gl-inet.com)"
 
+
 source "tmp/tmpglboard.in"
 
 choice
@@ -38,6 +39,21 @@ menu "Configure customer version information"
     default "Firmware generated using glbuilder, powered by GL.iNet(luochongjun@gl-inet.com)"
 	  help
 	    "These contents are appended to the firmware metadata data as releasenote, Please mainly do not use single and double quotation marks"
+endmenu
+
+ menu "Global option"
+  config NOT_USE_REMOTE_REPO
+  	bool
+    default n
+    prompt "Imagebuilder do not use remote repository"
+	  help
+	    "Do not use remote repository,avoid some priority issues."
+
+  config SIGNATURE_KEY_PATH
+  	string
+    prompt "Specified signature key path"
+	  help
+	    "TThe signature key identifies the producer of the firmware and is used to sign packages"
 endmenu
 
 config CUSTOMER_BUILDIN_PACKAGES
