@@ -56,13 +56,12 @@ sdk/prepare: $(sdk_prepare)
 sdk/feeds/update: $(sdk_prepare)
 	$(TOPDIR)/scripts/timestamp.pl -n $(TOPDIR)/tmp/sdk/$(TARGETMODEL-y)-$(TARGETVERSION-y)/feeds/stamp-sdk-feeds-update $(sdk_prepare)/feeds $(TOPDIR)/customer/source || \
 	$(SUBMAKE) -C $(sdk_prepare) package/symlinks && \
-	echo "CONFIG_AUTOREMOVE=n" >> $(sdk_prepare)/.config && \
-	echo "CONFIG_AUTOREBUILD=n" >> $(sdk_prepare)/.config && \
-	$(SUBMAKE) -C $(sdk_prepare) defconfig && \
 	mkdir -p $(TOPDIR)/tmp/sdk/$(TARGETMODEL-y)-$(TARGETVERSION-y)/feeds/ && \
 	touch $(TOPDIR)/tmp/sdk/$(TARGETMODEL-y)-$(TARGETVERSION-y)/feeds/stamp-sdk-feeds-update
 
 sdk/compile: sdk/feeds/update tmp/.customer-package.in
+	echo "CONFIG_AUTOREMOVE=n" > $(sdk_prepare)/.config
+	echo "CONFIG_AUTOREBUILD=n" >> $(sdk_prepare)/.config
 	grep -vE '^(#|$$|CONFIG_DOWNLOAD_FROM_ALIYUN|CONFIG_CUSTOMER_VERSION|CONFIG_NOT_USE_REMOTE_REPO|CONFIG_SIGNATURE_KEY_PATH|CONFIG_USE_MUSL|CONFIG_CUSTOMER_BUILDIN_PACKAGES|CONFIG_arm|CONFIG_mips|CONFIG_mipsel)|$(TARGETMODEL-y)' \
 		$(TOPDIR)/.config >> $(sdk_prepare)/.config
 	$(SUBMAKE) -C $(sdk_prepare) defconfig
