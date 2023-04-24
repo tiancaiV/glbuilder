@@ -69,10 +69,10 @@ sdk/compile: sdk/feeds/update tmp/.customer-package.in
 
 sdk/install: sdk/compile
 	mkdir -p $(TOPDIR)/bin/$(TARGETMODEL-y)-$(TARGETVERSION-y)/package
-	$(warning  $(sort $(sdk_customer_target_packages)))
-	$(foreach p,$(sort $(sdk_customer_target_packages)), \
-		$(sdk_prepare)/staging_dir/host/bin/find $(sdk_prepare)/bin -type f -name $(p)*.ipk -exec cp -f {}  $(TOPDIR)/bin/$(TARGETMODEL-y)-$(TARGETVERSION-y)/package/ \;; \
-	)
+	$(sdk_prepare)/staging_dir/host/bin/find $(sdk_prepare)/bin -type f -name *.ipk -exec cp -f {}  $(TOPDIR)/bin/$(TARGETMODEL-y)-$(TARGETVERSION-y)/package/ \;;
+	#$(foreach p,$(sort $(sdk_customer_target_packages)), \
+	#	$(sdk_prepare)/staging_dir/host/bin/find $(sdk_prepare)/bin -type f -name $(p)*.ipk -exec cp -f {}  $(TOPDIR)/bin/$(TARGETMODEL-y)-$(TARGETVERSION-y)/package/ \;; \
+	#)
 
 sdk/package/index: sdk/install FORCE
 	(cd $(TOPDIR)/bin/$(TARGETMODEL-y)-$(TARGETVERSION-y)/package; $(sdk_prepare)/scripts/ipkg-make-index.sh . > Packages && \
