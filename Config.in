@@ -64,3 +64,4 @@ config CUSTOMER_BUILDIN_PACKAGES
 
 
 source "tmp/.customer-package.in"
+source "Config-sdk-common.in"

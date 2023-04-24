@@ -1,0 +1,15 @@
+  config mipsel
+  	bool
+  config mips
+  	bool
+    default y if GL_MODEL_s200
+  config arm
+  	bool
+    default y if GL_MODEL_a1300 || GL_MODEL_ax1800 || GL_MODEL_axt1800 || GL_MODEL_mt2500 || GL_MODEL_mt3000
+  config USE_MUSL
+  	bool
+    default y
+  
+  config PACKAGE_libustream-openssl
+  	tristate
+		default m

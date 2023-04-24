@@ -63,6 +63,9 @@ sdk/feeds/update: $(sdk_prepare)
 	touch $(TOPDIR)/tmp/sdk/$(TARGETMODEL-y)-$(TARGETVERSION-y)/feeds/stamp-sdk-feeds-update
 
 sdk/compile: sdk/feeds/update tmp/.customer-package.in
+	grep -vE '^(#|$$|CONFIG_DOWNLOAD_FROM_ALIYUN|CONFIG_CUSTOMER_VERSION|CONFIG_NOT_USE_REMOTE_REPO|CONFIG_SIGNATURE_KEY_PATH|CONFIG_USE_MUSL|CONFIG_CUSTOMER_BUILDIN_PACKAGES|CONFIG_arm|CONFIG_mips|CONFIG_mipsel)|$(TARGETMODEL-y)' \
+		$(TOPDIR)/.config >> $(sdk_prepare)/.config
+	$(SUBMAKE) -C $(sdk_prepare) defconfig
 	$(foreach p,$(CUSTOMERPACKAGE-y), \
 		$(TOPDIR)/scripts/timestamp.pl -n $(sdk_prepare)/tmp/.glbuilder/package/feeds/glbuilder/$(p)/compiled $(CUSTOMERPATH-$(p)) || \
 		$(SUBMAKE)  -C $(sdk_prepare) $(JOB_FLAG) $(MAKE_FLAG) package/feeds/glbuilder/$(p)/compile IGNORE_ERRORS=m 2>/dev/null; \
