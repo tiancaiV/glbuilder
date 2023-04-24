@@ -26,6 +26,7 @@ sdk_prepare:=$(TOPDIR)/build_dir/sdk-$(TARGETMODEL-y)-$(TARGETVERSION-y)
 		[ -L $$(sdk_prepare)/feeds/ipq807x/ipq807x ] && unlink $$(sdk_prepare)/feeds/ipq807x/ipq807x || true; \
 		ln -s $$(TOPDIR)/feeds/ipq807x/ipq807x/ $$(sdk_prepare)/feeds/ipq807x/ipq807x; \
 	  fi; \
+	  [ -f $$(sdk_prepare)/include/meson.mk ] || cp $(TOPDIR)/include/meson.mk $$(sdk_prepare)/include/meson.mk; \
 	  mkdir -p $(TOPDIR)/tmp/sdk/$(TARGETMODEL-y)-$(TARGETVERSION-y); \
 	  touch $(TOPDIR)/tmp/sdk/$(TARGETMODEL-y)-$(TARGETVERSION-y)/prepared; \
 	}
@@ -63,7 +64,7 @@ sdk/feeds/update: $(sdk_prepare)
 sdk/compile: sdk/feeds/update tmp/.customer-package.in
 	$(foreach p,$(CUSTOMERPACKAGE-y), \
 		$(TOPDIR)/scripts/timestamp.pl -n $(sdk_prepare)/tmp/.glbuilder/package/feeds/glbuilder/$(p)/compiled $(CUSTOMERPATH-$(p)) || \
-		$(SUBMAKE)  -C $(sdk_prepare) $(JOB_FLAG) package/feeds/glbuilder/$(p)/compile IGNORE_ERRORS=m 2>/dev/null; \
+		$(SUBMAKE)  -C $(sdk_prepare) $(JOB_FLAG) $(MAKE_FLAG) package/feeds/glbuilder/$(p)/compile IGNORE_ERRORS=m 2>/dev/null; \
 	)
 
 sdk/install: sdk/compile

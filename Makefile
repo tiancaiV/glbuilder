@@ -8,6 +8,12 @@ AWS_URL:=https://fw.gl-inet.com/releases
 ALIYUN_URL:=https://fw.gl-inet.cn/releases
 MAKE_PID := $(shell echo $$PPID)
 JOB_FLAG := $(filter -j%, $(subst -j ,-j,$(shell ps T | grep "^\s*$(MAKE_PID).*$(MAKE)")))
+ifndef MAKE_FLAG
+  MAKE_FLAG:=
+endif
+ifeq ("$(origin V)", "command line")
+  MAKE_FLAG:=V=$(V)
+endif
 
 world:
 $(TOPDIR)/host/bin/mkhash: $(TOPDIR)/scripts/mkhash.c
