@@ -37,10 +37,10 @@ define customer_package
 $(foreach p,$(sdk_customer_target_packages),
   CUSTOMERPACKAGE-$(p):=$(subst $(TOPDIR)/,,$(CUSTOMERPATH-$(p)))
   $$(CUSTOMERPACKAGE-$(p))/compile: sdk/feeds/update
-	$$(SUBMAKE)  -C $$(sdk_prepare) $(JOB_FLAG) package/feeds/glbuilder/$(p)/compile IGNORE_ERRORS=m 2>/dev/null;
+	$$(SUBMAKE)  -C $$(sdk_prepare) $(JOB_FLAG) package/$(p)/compile IGNORE_ERRORS=m 2>/dev/null;
 	$$(sdk_prepare)/staging_dir/host/bin/find $$(sdk_prepare)/bin -type f -name $(p)*.ipk -exec cp -f {}  $(TOPDIR)/bin/$(TARGETMODEL-y)-$(TARGETVERSION-y)/package/ \;
   $$(CUSTOMERPACKAGE-$(p))/clean: sdk/prepare
-	$$(SUBMAKE)  -C $$(sdk_prepare) $(JOB_FLAG)  package/feeds/glbuilder/$(p)/clean IGNORE_ERRORS=m 2>/dev/null;
+	$$(SUBMAKE)  -C $$(sdk_prepare) $(JOB_FLAG)  package/$(p)/clean IGNORE_ERRORS=m 2>/dev/null;
 	-rm -f $(TOPDIR)/bin/$(TARGETMODEL-y)-$(TARGETVERSION-y)/package/$(p)*.ipk
 	-rm -f $(sdk_prepare)/tmp/.glbuilder/package/feeds/glbuilder/$(p)/compiled
 )
@@ -67,7 +67,7 @@ sdk/compile: sdk/feeds/update tmp/.customer-package.in
 	$(SUBMAKE) -C $(sdk_prepare) defconfig
 	$(foreach p,$(CUSTOMERPACKAGE-y), \
 		$(TOPDIR)/scripts/timestamp.pl -n $(sdk_prepare)/tmp/.glbuilder/package/feeds/glbuilder/$(p)/compiled $(CUSTOMERPATH-$(p)) || \
-		$(SUBMAKE)  -C $(sdk_prepare) $(JOB_FLAG) $(MAKE_FLAG) package/feeds/glbuilder/$(p)/compile IGNORE_ERRORS=m 2>/dev/null; \
+		$(SUBMAKE)  -C $(sdk_prepare) $(JOB_FLAG) $(MAKE_FLAG) package/$(p)/compile IGNORE_ERRORS=m 2>/dev/null || echo "package/feeds/glbuilder/$(p)/compile failed"; \
 	)
 
 sdk/install: sdk/compile
