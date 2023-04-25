@@ -436,8 +436,8 @@ sub gen_package_mk() {
 
 			next if $pkg->{buildonly};
 
-			printf "CUSTOMERPACKAGE-%s += %s\n", $config, $src->{name};
-			printf "CUSTOMERPATH-%s := %s\n", $src->{name}, $src->{path};
+			printf "CUSTOMERPACKAGE-%s += %s\n", $config, $pkg->{name};
+			printf "CUSTOMERPATH-%s := %s\n", $pkg->{name}, $src->{path};
 
 			if ($pkg->{variant}) {
 				if (!defined($variant_default) or $pkg->{variant_default}) {

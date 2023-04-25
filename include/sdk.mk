@@ -46,7 +46,7 @@ $(foreach p,$(sdk_customer_target_packages),
 )
 endef
 
-sdk_customer_target_packages:= $(sort $(foreach p,$(CUSTOMERPACKAGE-y),$(p) $(CUSTOMERDEP-$(p))))
+sdk_customer_target_packages:= $(CUSTOMERPACKAGE-y)
 $(eval $(call download_sdk))
 $(eval $(call prepare_sdk))
 $(eval $(call customer_package))
