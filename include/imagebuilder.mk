@@ -1,6 +1,6 @@
 define download_imagebuilder
 imagebuilder_target:=$(TOPDIR)/dl/imagebuilder-$(TARGETMODEL-y)-$(TARGETVERSION-y).tar.xz
-  $$(imagebuilder_target): $(TOPDIR)/scripts/download.pl  .config 
+  $$(imagebuilder_target): $(TOPDIR)/scripts/download.pl tools-prepare .config 
 	mkdir -p $$(TOPDIR)/dl
 	$$< $(TOPDIR)/dl $$(notdir $$@) $$(imagebuilder_hash) $(DOWNLOAD_URL)/imagebuilder/$(TARGETMODEL-y)
 endef
@@ -50,7 +50,7 @@ endif
 	echo "$$(subst ",,$$(CONFIG_CUSTOMER_VERSION_RELEASENOTES))" >$$(imagebuilder_prepare)/gl_release_note
 	mkdir -p $$(imagebuilder_prepare)/files/etc/opkg
 	-cp $$(TOPDIR)/board/$$(TARGETMODEL-y)/$$(TARGETVERSION-y)/distfeeds.conf  $$(imagebuilder_prepare)/files/etc/opkg/
-	-cp -r $$(TOPDIR)/files $$(imagebuilder_prepare)/files
+	-cp -r $$(TOPDIR)/files/* $$(imagebuilder_prepare)/files
 	$$(SUBMAKE) -C $$(imagebuilder_prepare) image PROFILE=$$(MODEL_PROFILE) PACKAGES="$$(TARGETPACKAGE-y)" BIN_DIR=$$@ FILES=$$(imagebuilder_prepare)/files
 endef
 

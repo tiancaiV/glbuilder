@@ -62,7 +62,7 @@ endif
 include $(TOPDIR)/include/sdk.mk
 include $(TOPDIR)/include/imagebuilder.mk
 
-world: .config tools-prepare imagebuilder/compile
+world: tools-prepare .config  imagebuilder/compile
 	@echo "done"
 
 clean:
