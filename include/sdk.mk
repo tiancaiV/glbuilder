@@ -1,14 +1,14 @@
 
 define download_sdk
 sdk_target:=$(TOPDIR)/dl/sdk-$(TARGETMODEL-y)-$(TARGETVERSION-y).tar.xz
-  $$(sdk_target): $(TOPDIR)/scripts/download.pl tools-prepare .config
+  $$(sdk_target): $(TOPDIR)/scripts/download.pl .config
 	mkdir -p $$(TOPDIR)/dl
 	$$< $(TOPDIR)/dl $$(notdir $$@) $$(sdk_hash) $(DOWNLOAD_URL)/sdk/$(TARGETMODEL-y)
 endef
 
 define prepare_sdk
 sdk_prepare:=$(TOPDIR)/build_dir/sdk-$(TARGETMODEL-y)-$(TARGETVERSION-y)
-  $$(sdk_prepare): $$(sdk_target) tmp-prepare
+  $$(sdk_prepare): $$(sdk_target)
 	[ -d $$(sdk_prepare) ] && $(TOPDIR)/scripts/timestamp.pl -n $(TOPDIR)/tmp/sdk/$(TARGETMODEL-y)-$(TARGETVERSION-y)/prepared $(TOPDIR)/dl/$$< || { \
 	  mkdir -p $$(sdk_prepare); \
 	  tar -xf $$< -C $$@ --strip-components 1 || rm -rf $$@; \

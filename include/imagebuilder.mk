@@ -1,6 +1,6 @@
 define download_imagebuilder
 imagebuilder_target:=$(TOPDIR)/dl/imagebuilder-$(TARGETMODEL-y)-$(TARGETVERSION-y).tar.xz
-  $$(imagebuilder_target): $(TOPDIR)/scripts/download.pl tools-prepare .config 
+  $$(imagebuilder_target): $(TOPDIR)/scripts/download.pl .config 
 	mkdir -p $$(TOPDIR)/dl
 	$$< $(TOPDIR)/dl $$(notdir $$@) $$(imagebuilder_hash) $(DOWNLOAD_URL)/imagebuilder/$(TARGETMODEL-y)
 endef
