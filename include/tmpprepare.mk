@@ -26,6 +26,10 @@ scripts/config/%onf:
 menuconfig: scripts/config/mconf tmp-prepare $(TOPDIR)/tmp/.customer-package.in
 	$< ./Config.in
 
+defconfig: scripts/config/conf tmp-prepare $(TOPDIR)/tmp/.customer-package.in FORCE
+	touch .config
+	$< --defconfig=.config Config.in
+
 .config:scripts/config/mconf tmp-prepare $(TOPDIR)/tmp/.customer-package.in $(TOPDIR)/host/bin/mkhash FORCE
 	@+if [ \! -e .config ] ; then \
 		 $(TOPDIR)/scripts/config/mconf ./Config.in; \
