@@ -11,7 +11,7 @@ tmp-prepare: FORCE
 	mkdir -p $(TOPDIR)/tmp
 	$(TOPDIR)/scripts/scanboarddir.sh $(TOPDIR)/board
 
-$(TOPDIR)/tmp/.customer-package.in: tmp-prepare FORCE
+$(TOPDIR)/tmp/.customer-package.in: tmp-prepare $(TOPDIR)/host/bin/mkhash FORCE
 	mkdir -p $(TOPDIR)/tmp/customer.tmp/info
 	rm -rf $(TOPDIR)/tmp/customer.tmp/info/.* 2>/dev/null || true
 	$(SUBMAKE) -s -f $(TOPDIR)/include/scan.mk IS_TTY=1 SCAN_TARGET="packageinfo" SCAN_DIR=$(TOPDIR)/customer/source SCAN_NAME="package" \
