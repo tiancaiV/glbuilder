@@ -44,10 +44,8 @@ make
 ```
 9. 等待编译完成后，编译好的镜像会在当前目录的bin/<model>/<version>/target目录下
 
-
 ## 加入自己的IPK
-
-1. 如果是openwrt通用的ipk，glbuilder将自动从imagebuilder或gl的软件仓库自动查找安装，如果是非常见的ipk请将自己的ipk文件放置在项目根目录的customer/ipk/目录下
+1. 我们有俩种方法获取ipk文件，通过远程仓库或customer/ipk本地目录，俩者互不冲突,可以混合使用，对于本地的ipk文件，我们需要手动将它拷贝到customer/ipk目录，远程仓库的地址在board/<model>/<version>/distfeeds.conf中定义，可以自己修改，为避免由于远程仓库版本更新导致编译生成的固件与官方发布版本不一致，远程仓库默认为禁用状态，如果要使能请在**Global option**选项中取消**Imagebuilder do not use remote repository**选项的选择，并且执行**make imagebuilder/clean**使配置选项立即生效。
 2. 根据自己的需求完成[基础配置](#编译支持gl-ui的固件基础配置)（不需要执行最后的make）
 3. 在Customer build-in packages选项中加入IPK的名字，如luci-app-aria2; 如果要移除某个包可以在前面加上'-'符号，如-dnsmasq代表不需要安装dnsmasq。在项目board/<model>/<version>/version_info.mk中，有通过gl_collision_package预置一些移除的包，原因是这些包与glinet的预置包冲突，如果有必要，可以编辑修改对应的gl_collision_package变量。
 4. 保存配置并退出，执行

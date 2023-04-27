@@ -49,7 +49,7 @@ make
 
 ## Add your own IPK
 
-1. If it is an openwrt common ipk, glbuilder will automatically find and install it from the imagebuilder or gl software warehouse. If it is an uncommon ipk, please place your own ipk file in the customer/ipk/ directory of the project root directory
+1. We have two ways to get the ipk file, through the remote repository or the customer/ipk local directory. For the local ipk file, we need to manually copy it to the customer/ipk directory. The remote repository address is defined in board/<model>/<version>/distfeeds.conf, which can be modified by yourself. In order to avoid the inconsistency between the compiled firmware and the official release version due to the remote repository version update, the remote repository is disabled by default. If you want to use please cancel the selection of the **Imagebuilder do not use remote repository option** in the **Global option** option, and execute **make imagebuilder/clean** to make the configuration option take effect immediately.
 2. Complete the [basic configuration](#compile-firmware-that-supports-gl-ui-basic-configuration) according to your own needs(do not need to execute the final make)
 3. Add the IPK name in the Customer build-in packages option, such as luci-app-aria2; if you want to remove a certain package, you can add a '-' symbol in front, such as -dnsmasq means that dnsmasq does not need to be installed. In the project board/<model>/<version>/version_info.mk, there are some removed packages preset by gl_collision_package. The reason is that these packages conflict with the preset packages of glinet. If necessary, you can edit and modify the corresponding gl_collision_package variable.
 4. Save the configuration and exit, execute
