@@ -44,7 +44,7 @@ endmenu
  menu "Global option"
   config NOT_USE_REMOTE_REPO
   	bool
-    default n
+    default y
     prompt "Imagebuilder do not use remote repository"
 	  help
 	    "Do not use remote repository,avoid some priority issues."
