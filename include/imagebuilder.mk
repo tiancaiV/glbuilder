@@ -59,7 +59,7 @@ $(eval $(call prepare_imagebuilder))
 $(eval $(call compile_imagebuilder))
 
 customer/ipk/index: $(imagebuilder_prepare) FORCE
-	(cd $(TOPDIR)/customer/ipk; $(imagebuilder_prepare)/scripts/ipkg-make-index.sh . > Packages && \
+	-(cd $(TOPDIR)/customer/ipk; $(imagebuilder_prepare)/scripts/ipkg-make-index.sh . > Packages && \
 		gzip -9nc Packages > Packages.gz; \
 	) >/dev/null 2>/dev/null
 
