@@ -2,10 +2,10 @@
 
 WORKDIR="$(pwd)"
 
-sudo -E apt-get update
-sudo -E apt-get install device-tree-compiler g++ ncurses-dev python asciidoc bash bc binutils bzip2 fastjar flex\
- gawk gcc genisoimage gettext git intltool jikespg libgtk2.0-dev libncurses5-dev libssl-dev make mercurial patch\
- perl2.rs-modules python ruby sdcc subversion unzip util-linux wget xsltproc zlib1g-dev zlib1g-dev -y
+sudo -E apt-get update 
+sudo -E apt-get install device-tree-compiler g++ ncurses-dev python asciidoc bash bc binutils bzip2 fastjar\
+ flex gawk gcc genisoimage gettext git intltool jikespg libgtk2.0-dev libncurses5-dev libssl-dev make mercurial\
+  patch perl-modules python2.7-dev rsync ruby sdcc subversion unzip util-linux wget xsltproc zlib1g-dev zlib1g-dev -y
 
 failed()
 {
