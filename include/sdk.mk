@@ -42,7 +42,7 @@ $(foreach p,$(sdk_customer_target_packages),
   $$(CUSTOMERPACKAGE-$(p))/clean: sdk/prepare
 	$$(SUBMAKE)  -C $$(sdk_prepare) $(JOB_FLAG)  package/$(p)/clean IGNORE_ERRORS=m 2>/dev/null;
 	-rm -f $(TOPDIR)/bin/$(TARGETMODEL-y)-$(TARGETVERSION-y)/package/$(p)*.ipk
-	-rm -f $(sdk_prepare)/tmp/.glbuilder/package/feeds/glbuilder/$(p)/compiled
+	-rm -f $(sdk_prepare)/tmp/.glbuilder/$(p)
 )
 endef
 
@@ -67,7 +67,7 @@ sdk/compile: sdk/feeds/update tmp/.customer-package.in
 	$(SUBMAKE) -C $(sdk_prepare) defconfig
 	$(info compile customer package: $(CUSTOMERPACKAGE-y))
 	$(foreach p,$(CUSTOMERPACKAGE-y), \
-		$(TOPDIR)/scripts/timestamp.pl -n $(sdk_prepare)/tmp/.glbuilder/package/feeds/glbuilder/$(p)/compiled $(CUSTOMERPATH-$(p)) || \
+		$(TOPDIR)/scripts/timestamp.pl -n $(sdk_prepare)/tmp/.glbuilder/$(p) $(CUSTOMERPATH-$(p)) || \
 		$(SUBMAKE)  -C $(sdk_prepare) $(JOB_FLAG) $(MAKE_FLAG) package/$(p)/compile IGNORE_ERRORS=m 2>/dev/null || echo "package/feeds/glbuilder/$(p)/compile failed"; \
 	)
 

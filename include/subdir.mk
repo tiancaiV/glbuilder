@@ -42,8 +42,8 @@ log_make = \
 		mkdir -p $(BUILD_LOG_DIR)/$(1)$(if $(4),/$(4));) \
 	$(SCRIPT_DIR)/time.pl "time: $(1)$(if $(4),/$(4))/$(if $(3),$(3)-)$(2)" \
 	$$(SUBMAKE) $(subdir_make_opts) $(if $(3),$(3)-)$(2) && \
-		mkdir -p $(TMP_DIR)/.glbuilder/$(1) && \
-		touch $(TMP_DIR)/.glbuilder/$(1)/compiled \
+		mkdir -p $(TMP_DIR)/.glbuilder && \
+		touch $(TMP_DIR)/.glbuilder/`basename $(1)` \
 		$(if $(BUILD_LOG),SILENT= 2>&1 | tee $(BUILD_LOG_DIR)/$(1)$(if $(4),/$(4))/$(if $(3),$(3)-)$(2).txt)
 
 ifdef CONFIG_AUTOREMOVE
