@@ -10,6 +10,14 @@
   	bool
     default y
   
+  config ALL
+  	tristate
+		default y
+
+  config ALL_KMODS
+  	tristate
+		default y
+
   config PACKAGE_libustream-openssl
   	tristate
 		default m
