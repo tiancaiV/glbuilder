@@ -1,5 +1,9 @@
  mainmenu "GL.iNet(luochongjun@gl-inet.com)"
 
+config MODULES
+    modules
+    bool
+    default y
 
 source "tmp/tmpglboard.in"
 
