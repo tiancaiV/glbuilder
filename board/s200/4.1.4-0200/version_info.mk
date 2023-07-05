@@ -1,0 +1,4 @@
+MODEL_PROFILE:=glinet_gl-s200-nor-nand
+imagebuilder_hash:=95fbb729ad60b75b6f9e483746e18214c4140c4a68322427ce36fd7aa8ff9620
+sdk_hash:=7e8496f764978159d13070a5a234b91f949641634d108e9cd2f8d55cbe7bd1ff
+gl_collision_package:= -dnsmasq -wpad-basic-wolfssl -kmod-usb-serial-ch341 -libustream-wolfssl

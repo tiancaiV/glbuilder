@@ -1,0 +1,7 @@
+src-git base https://github.com/openwrt/openwrt.git^30e2782e0647a837044ada77ce86b29c5af8a9f2
+src-git packages https://github.com/openwrt/packages.git^477e23e85dfac98ba2372fecdcbf2013584a1542
+src-git luci https://github.com/openwrt/luci.git^a0c73faf502684bca2ffbdab511510f37d799b76
+src-git routing https://github.com/openwrt/routing.git^83bb4b5d97a3af49d561d469be965c427bfc0db2
+src-git telephony https://github.com/openwrt/telephony.git^920fbc5c0a2e4badf51bceff42e9a1e3eb693462
+src-git gl_feeds_common https://github.com/gl-inet/gl-feeds.git^e73a053fa6e597343f1be0518d17fbdbd4975650
+src-git gl_feeds_21_02_2 https://github.com/gl-inet/gl-feeds.git^68dc5722d4dd9a2f8388998343590be0a8a20b99
