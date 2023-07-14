@@ -5,5 +5,4 @@ src-git telephony https://github.com/openwrt/telephony.git^0183c1adda0e7581698b0
 src-git gl_feeds_wlanap https://github.com/gl-inet/gl-feeds.git^5df1bae20bf4f2bd39168707e6363bcf8bdf5f29
 src-git gl_feeds_common https://github.com/gl-inet/gl-feeds.git^4fd97cfe3c89f7277911375d9aa0ce85ac6d27c7
 src-git luci https://github.com/openwrt/luci.git^1c3b32dc1bec15e3076a447762b1c4f94eb75fb7
-src-git glinet http://192.168.17.119:888/gl.sdk4.0/gl.router/gl-sdk4-collect.git^9c890c46ea6e8ea44762c52cbe52a4aebc49fb79
 src-git gl_feed_common https://github.com/gl-inet/gl-feeds.git^4fd97cfe3c89f7277911375d9aa0ce85ac6d27c7

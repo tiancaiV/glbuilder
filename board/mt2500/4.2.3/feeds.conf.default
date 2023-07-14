@@ -6,5 +6,3 @@ src-git-full telephony https://github.com/openwrt/telephony.git^920fbc5
 src-git mtk_openwrt_feed https://git01.mediatek.com/openwrt/feeds/mtk-openwrt-feeds.git^df3fc79
 src-git gl_feed_common https://github.com/gl-inet/gl-feeds.git^4fd97cfe3c89f7277911375d9aa0ce85ac6d27c7
 src-git gl_feed_21_02 https://github.com/gl-inet/gl-feeds.git^581563a214d313c367d7ffe5a1e9038fc18292ed
-src-git glinet http://192.168.17.119:888/gl.sdk4.0/gl.router/gl-sdk4-collect.git^9c890c46ea6e8ea44762c52cbe52a4aebc49fb79
-src-git mt7981 http://192.168.17.119:888/gl.sdk4.0/gl.router/mt7981-feeds.git^429ad7722b2b3d73bfaec078390a47f22bdcc175
