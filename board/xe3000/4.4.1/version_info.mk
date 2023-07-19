@@ -1,0 +1,4 @@
+MODEL_PROFILE:=glinet_gl-xe3000
+imagebuilder_hash:=c5216c63c0f5bfa307549675050bb09fbaff45befc35911a34f14caaf84e8ff7
+sdk_hash:=16bf422c800b6c0d32d741a4e0b07813bf6925215e3903950782cba0c72d10fa
+gl_collision_package:= -dnsmasq
