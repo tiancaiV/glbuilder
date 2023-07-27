@@ -52,3 +52,6 @@ esac
 #将openwrt.org替换为github，中国大陆访问更快
 sed -i "s/git.openwrt.org\/feed/github.com\/openwrt/g"  ${DST}/${FEEDS}
 sed -i "s/git.openwrt.org\/project/github.com\/openwrt/g"  ${DST}/${FEEDS}
+
+#将内部源替换为github
+sed -i "s/git@192.168.17.119:gl.sdk4.0\/mirror/https:\/\/github.com\/openwrt/g" ${DST}/${FEEDS}
