@@ -85,20 +85,20 @@ The firmware compiled in this way can see the test_config file in the /etc/confi
 
 2. You can modify the **02_gl_wifi** to set the wifi what you want, for examle, if you want to change device wifi as GL-xxx(xxx is last three digits of device ID), you need to make the following changes in the **02_gl_wifi file**:
 
-Add **device_id=$(cat /proc/gl-hw-info/device_ddns | cut -c5-7)** command to get last three digits of device ID after **country=$(cat /proc/gl-hw-info/country_code)** command, the code snippet is as follows:
+2.1 Add **device_id=$(cat /proc/gl-hw-info/device_ddns | cut -c5-7)** command to get last three digits of device ID after **country=$(cat /proc/gl-hw-info/country_code)** command, the code snippet is as follows:
 ```
 country=$(cat /proc/gl-hw-info/country_code)
 device_id=$(cat /proc/gl-hw-info/device_ddns | cut -c5-7)
 ```
 
-Chang **local ssid="GL-$model-$mac"** to **local ssid="GL-$device_id"**, the code snippet is as follows:
+2.2 Chang **local ssid="GL-$model-$mac"** to **local ssid="GL-$device_id"**, the code snippet is as follows:
 ```
 fix_wifi_iface() {
     local ssid="GL-$model-$device_id"
     local guest="guest2g"
 ```
 
-Chang **local ssid="GL-$model-$mac"** to **local ssid="GL-$device_id"**, the code snippet is as follows:
+2.3 Chang **local ssid="GL-$model-$mac"** to **local ssid="GL-$device_id"**, the code snippet is as follows:
 ```
     echo "$band" | grep -q 5 && {
         ssid="GL-$model-$device_id-5G"
