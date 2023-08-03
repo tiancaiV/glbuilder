@@ -79,7 +79,84 @@ echo "test my files" >files/etc/config/test_config
 ```
 The firmware compiled in this way can see the test_config file in the /etc/config/ directory in the file system
 
-
+### For example, how to change the default wifi name
+1. Please get the **/rom/etc/uci-defaults/02_gl_wifi** file in the device file system via winscp tools
+2. You can modify the 02_gl_wifi to set the wifi what you want, for examle, if you want to change device wifi as GL-xxx(xxx is last three digits of device ID), you need to make the following changes in the 02_gl_wifi file:
+2.1 Add **device_id=$(cat /proc/gl-hw-info/device_ddns | cut -c5-7)** command to get last three digits of device ID after **country=$(cat /proc/gl-hw-info/country_code)** command, the code snippet is as follows:
+```
+country=$(cat /proc/gl-hw-info/country_code)
+device_id=$(cat /proc/gl-hw-info/device_ddns | cut -c5-7)
+```
+2.2 Chang **local ssid="GL-$model-$mac"** to **local ssid="GL-$device_id"**, the code snippet is as follows:
+```
+fix_wifi_iface() {
+    local ssid="GL-$model-$device_id"
+    local guest="guest2g"
+```
+2.3 Chang **local ssid="GL-$model-$mac"** to **local ssid="GL-$device_id"**, the code snippet is as follows:
+```
+    echo "$band" | grep -q 5 && {
+        ssid="GL-$model-$device_id-5G"
+        guest="guest5g"
+```
+3. Create a directory in the project root directory and put your own files
+```
+mkdir -p files/etc/uci-defaults/
+```
+4. Cp 02_gl_wifi file to **files/etc/uci-defaults/**
+5. Change the 02_gl_wifi file permission
+```
+chmod 775 files/etc/uci-defaults/02_gl_wifi
+```
+6. Compile the firmware again
+```
+make
+```
+### For example, how to enable GoodCloud and Remote SSH and Remote Web Access
+1. Please get the **/rom/etc/uci-defaults/gl-cloud** file in the device file system via winscp tools
+2 Add some commands to the end of the file, the code snippet is as follows:
+```
+uci -q delete glconfig.cloud
+uci commit
+uci set gl-cloud.@cloud[0].enable1="1"
+uci set gl-cloud.@cloud[0].server="gslb-us.goodcloud.xyz"
+uci set rtty.general.ssh_en=1
+uci set rtty.general.web_en=1
+uci commit
+```
+Note:
+America server is: gslb-us.goodcloud.xyz
+Europe server is: gslb-eu.goodcloud.xyz
+Asia Pacific server is: gslb-jp.goodcloud.xyz
+3. Create a directory in the project root directory and put your own files
+```
+mkdir -p files/etc/uci-defaults/
+```
+4. Cp gl-cloud file to **files/etc/uci-defaults/**
+5. Change the gl-cloud file permission
+```
+chmod 775 files/etc/uci-defaults/gl-cloud
+```
+6. Compile the firmware again
+```
+make
+```
+## Please disable the device detect the latest firmware, otherwise this function may replace your customized firmware
+1. Create a files and directory in the project root directory
+```
+mkdir -p files/etc/uci-defaults/
+touch files/etc/uci-defaults/04_gl_upgrade
+chmod 775 files/etc/uci-defaults/04_gl_upgrade
+```
+2. Write some commands to disable detect the latest firmware
+```
+echo uci set upgrade.general.url="www"  >> files/etc/uci-defaults/04_gl_upgrade
+echo uci commit upgrade  >> files/etc/uci-defaults/04_gl_upgrade
+```
+3. Compile the firmware again
+```
+make
+```
 ## TIPS
 1. Compilation in the form of source code and IPK can be combined with each other
 2. The packages removed using the '-' symbol in the Customer build-in packages option may be reselected by other dependencies, and the corresponding dependent packages need to be removed at the same time
