@@ -80,6 +80,7 @@ echo "test my files" >files/etc/config/test_config
 The firmware compiled in this way can see the test_config file in the /etc/config/ directory in the file system
 
 ### For example, how to change the default wifi name
+
 1. Please get the **/rom/etc/uci-defaults/02_gl_wifi** file in the device file system via winscp tools
 
 2. You can modify the **02_gl_wifi** to set the wifi what you want, for examle, if you want to change device wifi as GL-xxx(xxx is last three digits of device ID), you need to make the following changes in the 02_gl_wifi file:
@@ -105,8 +106,8 @@ fix_wifi_iface() {
 ```
 mkdir -p files/etc/uci-defaults/
 ```
-4. Cp 02_gl_wifi file to **files/etc/uci-defaults/**
-5. Change the 02_gl_wifi file permission
+4. Cp **02_gl_wifi** file to **files/etc/uci-defaults/**
+5. Change the **02_gl_wifi** file permission
 ```
 chmod 775 files/etc/uci-defaults/02_gl_wifi
 ```
@@ -127,13 +128,13 @@ uci set rtty.general.ssh_en=1
 uci set rtty.general.web_en=1
 uci commit
 ```
-Note:
+	Note:
 
-America server is: gslb-us.goodcloud.xyz
+	America server is: gslb-us.goodcloud.xyz
 
-Europe server is: gslb-eu.goodcloud.xyz
+	Europe server is: gslb-eu.goodcloud.xyz
 
-Asia Pacific server is: gslb-jp.goodcloud.xyz
+	Asia Pacific server is: gslb-jp.goodcloud.xyz
 
 3. Create a directory in the project root directory and put your own files
 ```
