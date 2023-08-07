@@ -1,0 +1,3 @@
+MODEL_PROFILE:=glinet_gl-x3000
+imagebuilder_hash:=1a51829c05b92d26ddfca177d693957dd05d6148c6b56155252f48e63e1d22c6
+sdk_hash:=afe668378f69e83318e326dc21a92a4ba5a942a7740f8da9cddc12cb51a17f21
