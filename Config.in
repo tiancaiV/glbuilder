@@ -25,14 +25,13 @@ menu "Configure customer version information"
 
   config CUSTOMER_VERSION_NUMBER
   	string
-    default "snapshot"
     prompt "Specified version number"
 	  help
 	    "This string will be placed in the /etc/glversion file, and the value will be displayed on the UI"
 
   config CUSTOMER_VERSION_TYPE
   	string
-    default "Unknow"
+    default "release"
     prompt "Specified version type"
 	  help
 	    "This string will be placed in the /etc/version.type file, and the value will be displayed on the UI"

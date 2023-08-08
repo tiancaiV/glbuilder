@@ -45,8 +45,13 @@ endif
 	  		cp $(CONFIG_SIGNATURE_KEY_PATH)/key-build*  $$(imagebuilder_prepare)/ && \
 			cp $(CONFIG_SIGNATURE_KEY_PATH)/key-build.pub $$(imagebuilder_prepare)/files/etc;
 	echo "$(date '+%Y-%m-%d %H:%M:%S')" >$$(imagebuilder_prepare)/files/etc/version.date
+ifneq ($$(CONFIG_CUSTOMER_VERSION_NUMBER),"")
 	echo "$$(subst ",,$$(CONFIG_CUSTOMER_VERSION_NUMBER))" >$$(imagebuilder_prepare)/files/etc/glversion
 	echo "$$(subst ",,$$(CONFIG_CUSTOMER_VERSION_NUMBER))" >$$(imagebuilder_prepare)/release
+else
+	echo "$$(TARGETVERSION-y)" >$$(imagebuilder_prepare)/files/etc/glversion
+	echo "$$(TARGETVERSION-y)" >$$(imagebuilder_prepare)/release
+endif
 	echo "$$(subst ",,$$(CONFIG_CUSTOMER_VERSION_TYPE))" >$$(imagebuilder_prepare)/files/etc/version.type
 	echo "$$(subst ",,$$(CONFIG_CUSTOMER_VERSION_RELEASENOTES))" >$$(imagebuilder_prepare)/gl_release_note
 	mkdir -p $$(imagebuilder_prepare)/files/etc/opkg
