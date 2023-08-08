@@ -18,7 +18,7 @@ failed()
 
 mkdir -p ${WORKDIR}/assets
 
-TESTMODELS="ar750 ar750s ar300m ar300m16 x300b x750 xe300 mt1300 b1300 sft1200"
+TESTMODELS="ar750 ar750s ar300m x300b x750 xe300 mt1300 b1300 sft1200"
 
 #for m in $(dir ${WORKDIR}/board);do
 for m in $TESTMODELS;do
