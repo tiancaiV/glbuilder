@@ -1,3 +1,4 @@
+MODEL_PROFILE:=glinet_gl-ar300m-nor
 imagebuilder_hash:=e7f0b767abb0a20a61f0804f1db0e7f271955301021fbac75ad992035d1b9301
 sdk_hash:=377853617856e428d2010ace7c4d6f50da6940686985082cbbd762fc7a7b4c16
 gl_collision_package:= -dnsmasq -wpad-basic-wolfssl -libustream-wolfssl -gl-sdk4-nl80211-event
