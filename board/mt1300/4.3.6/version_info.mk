@@ -1,0 +1,4 @@
+MODEL_PROFILE:=glinet_gl-mt1300
+imagebuilder_hash:=46e443ae50197cec3dbff62aba8da182c2c27c5c2026b3b7ae7aab3819b9bb4d
+sdk_hash:=33fadb50cccb52d83d79e047c175346c198e914f20d10dae6077bb7bbff079de
+gl_collision_package:= -dnsmasq -wpad-basic-wolfssl

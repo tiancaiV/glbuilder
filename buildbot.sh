@@ -18,7 +18,10 @@ failed()
 
 mkdir -p ${WORKDIR}/assets
 
-for m in $(dir ${WORKDIR}/board);do
+TESTMODELS="ar750 ar750s ar300m ar300m16 x300b x750 xe300 mt1300 b1300 sft1200"
+
+#for m in $(dir ${WORKDIR}/board);do
+for m in $TESTMODELS;do
 	for v in $(dir ${WORKDIR}/board/${m});do
 		echo CONFIG_GL_MODEL_"${m}"=y > .config
 		echo CONFIG_VERSION_"${m}"_"${v}"=y >>.config

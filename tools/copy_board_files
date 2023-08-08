@@ -38,12 +38,28 @@ case "${MODEL}" in
 	"axt1800")
 		echo "gl_collision_package:= -dnsmasq -wpad" >> ${DST}/${INFO}
 	;;
+	"x750"|\
+	"ar750")
+		echo "gl_collision_package:= -PCI_SUPPORT -dnsmasq -kmod-ath10k -wpad-basic-wolfssl -libustream-wolfssl"
+	"ar750s")
+		echo "gl_collision_package:= -dnsmasq -kmod-ath10k-ct -wpad-basic-wolfssl -libustream-wolfssl -ath10k-firmware-qca9887-ct" >> ${DST}/${INFO}
+	;;
 	"x300b"|\
 	"a1300")
 		echo "gl_collision_package:= -dnsmasq -wpad-basic-wolfssl -libustream-wolfssl" >> ${DST}/${INFO}
 	;;
+	"ar300m"|\
+	"ar300m16")
+		echo "gl_collision_package:= -dnsmasq -wpad-basic-wolfssl -libustream-wolfssl -gl-sdk4-nl80211-event" >> ${DST}/${INFO}
+	;;
+	"mt1300")
+		echo "gl_collision_package:= -dnsmasq -wpad-basic-wolfssl" >> ${DST}/${INFO}
+	;;
 	"s200")
 		echo "gl_collision_package:= -dnsmasq -wpad-basic-wolfssl -kmod-usb-serial-ch341 -libustream-wolfssl" >> ${DST}/${INFO}
+	;;
+	"sft1200")
+		echo "gl_collision_package:= -dnsmasq -i2c-tools" >> ${DST}/${INFO}
 	;;
 	*)
 		echo "gl_collision_package:= -dnsmasq" >> ${DST}/${INFO}
