@@ -41,9 +41,11 @@ case "${MODEL}" in
 	"x750"|\
 	"ar750")
 		echo "gl_collision_package:= -PCI_SUPPORT -dnsmasq -kmod-ath10k -wpad-basic-wolfssl -libustream-wolfssl"
+	;;
 	"ar750s")
 		echo "gl_collision_package:= -dnsmasq -kmod-ath10k-ct -wpad-basic-wolfssl -libustream-wolfssl -ath10k-firmware-qca9887-ct" >> ${DST}/${INFO}
 	;;
+	"xe300"|\
 	"x300b"|\
 	"a1300")
 		echo "gl_collision_package:= -dnsmasq -wpad-basic-wolfssl -libustream-wolfssl" >> ${DST}/${INFO}
